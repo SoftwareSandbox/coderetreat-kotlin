@@ -1,10 +1,10 @@
 # Code Retreat - Kotlin
 
-Kickstart Kotlin 1.4.x with AssertJ and MockK.
+Kickstart Kotlin 1.5.x with AssertJ and Mockito.
 
 Take care to update IntelliJ's Kotlin version when prompted!
 
-[MockK usage](https://mockk.io/)
+[Mockito Kotlin usage](https://kotlintesting.com/using-mockito-in-kotlin-projects/)
 
 Happy Coding!
 
@@ -12,10 +12,3 @@ Happy Coding!
 The rules to the Mars Rover Kata you can find in [rover.md](rover.md).
 
 If you're looking for more inspiration go here [https://kata-log.rocks](https://kata-log.rocks).
-
-## Running tests with IntelliJ instead of via Gradle
-> Open Preferences  
-> Build, Execution, Deployment  
-> Build Tools  
-> Gradle  
-> Run tests uing: `IntelliJ IDEA`
