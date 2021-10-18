@@ -12,3 +12,6 @@ Happy Coding!
 The rules to the Mars Rover Kata you can find in [rover.md](rover.md).
 
 If you're looking for more inspiration go here [https://kata-log.rocks](https://kata-log.rocks).
+
+## Rotating Pairs Kata
+The rules to the Rotating Pairs Kata you can find in [rotatingpairs.md](rotatingpairs.md).
