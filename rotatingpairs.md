@@ -18,7 +18,7 @@ There are specific rules when pairing up initially, easiest is to just form Pair
 Rules when rotating:
 1. First, make sure the Pair itself is unique (People in the Pairs haven't paired yet in this Kata).
 2. Secondly, make sure at least one of the People in the Pair is working on a Codebase they haven't seen yet.
-3. If neither the first nor the second rule can be applied anymore, the rotation starts over from the top. (The way you continue the rotation can be arbitrary, but you can consider this an enabling constraint)
+3. If neither the first nor the second rule can be applied anymore, the rotation starts over from the top so it's the same exact constellation as the initial pair-up. (The way we continue the rotation is arbitrary, but you can consider this an enabling constraint)
 
 Here are the acceptance criteria for a kata with 6 People:
 
@@ -75,3 +75,10 @@ Here are the acceptance criteria for a kata with 6 People:
     Codebase 2 with "Florent" and "Agnes",
     Codebase 3 with "Jelle" and "Olivier",
     //Since we completed all the possible constellations, we start over from the top (so 1st rotation after pair up)
+
+## Extension
+When dealing with an **odd number** of People, there will be at least one Triplet among the Ensembles, all the others are still Pairs.  
+The same rules should still apply when rotating:
+1. First, make sure the Pair itself is unique (People in the Pairs haven't paired yet in this Kata).
+2. Secondly, make sure at least one of the People in the Pair is working on a Codebase they haven't seen yet.
+3. If neither the first nor the second rule can be applied anymore, the rotation starts over from the top so it's the same exact constellation as the initial pair-up. (The way we continue the rotation is arbitrary, but you can consider this an enabling constraint)
