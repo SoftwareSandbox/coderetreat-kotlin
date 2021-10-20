@@ -18,9 +18,37 @@ There are specific rules when pairing up initially, easiest is to just form Pair
 Rules when rotating:
 1. First, make sure the Pair itself is unique (People in the Pairs haven't paired yet in this Kata).
 2. Secondly, make sure at least one of the People in the Pair is working on a Codebase they haven't seen yet.
-3. If neither the first nor the second rule can be applied anymore, the rotation starts over from the top so it's the same exact constellation as the initial pair-up. (The way we continue the rotation is arbitrary, but you can consider this an enabling constraint)
+3. Third, make sure one person in a Pair stays for at least one rotation (or worded otherwise: a codebase should never be a complete new one for a whole Pair)
+4. If none of the above rules can be applied anymore, the rotation starts over from the top so it's the same exact constellation as the initial pair-up. (The way we continue the rotation is arbitrary, but you can consider this an enabling constraint)
 
-Here are the acceptance criteria for a kata with 6 People:
+Here are the acceptance criteria for a kata with 6 People, applying only the rules of having unique pairs:
+
+    Given people "Silvio", "Olivier", "Florent", "Jeremie", "Jelle", "Agnes"
+    when pairing up
+    then the following Pairs should be formed:
+    "Silvio" and "Olivier",
+    "Florent" and "Jeremie",
+    "Jelle" and "Agnes",
+
+    when rotating for the 1st time
+    then the following Pairs should be formed:
+    "Silvio" and "Jeremie",
+    "Florent" and "Agnes",
+    "Jelle" and "Olivier"
+    
+    when rotating for the 2nd time
+    then the following Pairs should be formed:
+    "Silvio" and "Agnes",
+    "Florent" and "Olivier",
+    "Jelle" and "Jeremie"    
+
+    when rotating for the 3rd time
+    then the following Pairs should be formed:
+    "Silvio" and "Olivier",
+    "Florent" and "Jeremie",
+    "Jelle" and "Agnes",
+
+Here are the acceptance criteria for a kata with 6 People, applying all the rules:
 
     Given people "Silvio", "Olivier", "Florent", "Jeremie", "Jelle", "Agnes"
     when pairing up
