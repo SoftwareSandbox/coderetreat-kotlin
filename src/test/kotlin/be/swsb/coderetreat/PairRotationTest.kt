@@ -88,6 +88,39 @@ class PairRotationTest {
                 Codebase(3).with { "Jelle" and "Olivier" },
             )
     }
+
+    @Test
+    internal fun `Integration Test`() {
+        val people = listOf("Silvio", "Olivier", "Florent", "Jeremie", "Jelle", "Agnes")
+
+        val rotationSchedule: List<List<Desk>> = fullRotationScheduleFor(people).also {
+            it.mapIndexed { idx, desks ->
+                println(
+"""Rotation ${idx + 1}:
+${desks.asString()}
+
+""".trimMargin()
+                )
+            }
+        }
+
+        assertThat(rotationSchedule).hasSize(rotationSchedule.toSet().size)
+    }
+
+    private fun fullRotationScheduleFor(people: List<String>): List<List<Desk>> {
+        var counter = 1
+        var rotation: List<Desk> = emptyList()
+        return generateSequence {
+            when {
+                counter == 1 -> rotation = people.pairUpToDesks()
+                counter == 2 -> rotation = rotation.rotateFirst()
+                counter % 2 == 0 -> rotation = rotation.rotateEven()
+                counter % 2 != 0 -> rotation = rotation.rotateOdd()
+            }
+            counter += 1
+            rotation
+        }.take(people.size).toList()
+    }
 }
 
 private fun List<Ensemble>.containsExactly(vararg pairs: Ensemble) = also {
@@ -97,6 +130,7 @@ private fun List<Ensemble>.containsExactly(vararg pairs: Ensemble) = also {
 private fun List<Desk>.containsExactly(vararg desks: Desk) = also {
     assertThat(it).containsExactlyElementsOf(desks.toList())
 }
+
 private infix fun String.and(other: String): Ensemble = this to other
 
 private fun Codebase(id: Codebase) = DeskBuilder(id)
