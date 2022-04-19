@@ -9,7 +9,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	
 	<properties>
-		<kotlin.version>1.5.31</kotlin.version>
+		<kotlin.version>1.6.20</kotlin.version>
 		<kotlin.compiler.incremental>true</kotlin.compiler.incremental>
 		<jupiter.version>5.7.2</jupiter.version>
 		<mockito.version>3.12.4</mockito.version>
