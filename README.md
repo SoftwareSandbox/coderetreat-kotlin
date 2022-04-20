@@ -1,6 +1,6 @@
 # Code Retreat - Kotlin
 
-Kickstart Kotlin 1.5.x with AssertJ and Mockito.
+Kickstart Kotlin 1.6.20 with AssertJ and Mockito.
 
 Take care to update IntelliJ's Kotlin version when prompted!
 
