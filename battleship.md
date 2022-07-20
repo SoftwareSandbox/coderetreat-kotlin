@@ -3,18 +3,18 @@
 You can find more info on the game of [Battleship here](https://en.wikipedia.org/wiki/Battleship_(game)).
 
 ## Rules
-We'll start with the grid, it's 10x10.
-
-Ships can only be placed on spaces inside the grid.
-
-Ships can only be placed orthogonally (not diagonally).
-
 There are 5 types of ships.
 1 Carrier (which has a size of 5).
 1 Battleship (size of 4)
 1 Destroyer (size of 3)
 1 Submarine (also size of 3)
 1 Patrol Boat (size of 2)
+
+A Player has a grid of 10x10.
+
+Ships can only be placed on spaces inside the grid.
+
+Ships can only be placed orthogonally (not diagonally).
 
 You can only put one of each on the grid.
 
