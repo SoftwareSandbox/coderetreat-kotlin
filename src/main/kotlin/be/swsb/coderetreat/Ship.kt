@@ -22,16 +22,26 @@ enum class ShipClass(val size: Int) {
 
     override fun toString() = this.name
 }
+
 val AllShipClasses = ShipClass.values().toSet()
 
 
-class DamageTracker(private val maxSustainableDamage: Int, private val damage : MutableSet<Position> = mutableSetOf()) {
+class DamageTracker(
+    private val maxSustainableDamage: Int,
+    private val damage: MutableSet<Position> = mutableSetOf()
+) {
     val isFull: Boolean
         get() = damage.size == maxSustainableDamage
+
     operator fun plusAssign(hit: Position) {
         damage.add(hit)
     }
+
+    override fun toString(): String {
+        return "💥".repeat(damage.size) + "◻️".repeat(maxSustainableDamage - damage.size)
+    }
 }
+
 fun noDamage(maxSustainableDamage: Int) = DamageTracker(maxSustainableDamage)
 
 data class Ship(
@@ -51,14 +61,13 @@ data class Ship(
 
     internal fun receiveFire(target: Position): FiringResult {
         println("$type at $positions receiving fire at $target")
-        println("current damage: $damage")
-        if (target !in positions) return FiringResult.Ocean
+        if (target !in positions) return FiringResult.Ocean.also { println("Missed!") }
         damage += target
-        return if (isSunk) FiringResult.Sunk
-        else FiringResult.Hit
+        return if (isSunk) FiringResult.Sunk.also { println("$damage -> Sunk!") }
+        else FiringResult.Hit.also { println("Current damage: $damage") }
     }
 
-    internal fun overlapsWith(other: Ship) : Boolean = positions.any { it in other.positions }
+    internal fun overlapsWith(other: Ship): Boolean = positions.any { it in other.positions }
 
     override fun toString() = "$type at $positions"
 }
