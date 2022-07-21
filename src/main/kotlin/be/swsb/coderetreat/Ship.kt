@@ -24,6 +24,16 @@ enum class ShipClass(val size: Int) {
 }
 val AllShipClasses = ShipClass.values().toSet()
 
+
+class DamageTracker(private val maxSustainableDamage: Int, private val damage : MutableSet<Position> = mutableSetOf()) {
+    val isFull: Boolean
+        get() = damage.size == maxSustainableDamage
+    operator fun plusAssign(hit: Position) {
+        damage.add(hit)
+    }
+}
+fun noDamage(maxSustainableDamage: Int) = DamageTracker(maxSustainableDamage)
+
 data class Ship(
     val type: ShipClass,
     private val from: Position,
@@ -33,10 +43,10 @@ data class Ship(
         Horizontal -> from + at(type.size - 1, 0)
         Vertical -> from + at(0, type.size - 1)
     }
-    private val damage = mutableSetOf<Position>()
+    private val damage = noDamage(type.size)
 
     val isSunk: Boolean
-        get() = damage.size == type.size
+        get() = damage.isFull
     val positions: List<Position> = from..to
 
     internal fun receiveFire(target: Position): FiringResult {
