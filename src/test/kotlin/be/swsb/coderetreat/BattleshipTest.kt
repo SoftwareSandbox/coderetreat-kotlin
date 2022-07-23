@@ -65,6 +65,29 @@ class BattleshipTest {
             val carrier = Carrier(At(0, 0), Direction.Vertical)
             assertThat(visualize(PlayingField(setOf(carrier)))).isEqualTo(expected)
         }
+
+        @Test
+        internal fun `a playing field with a combination of all the ships`() {
+            val expected = """
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🚤🚤🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🟦🟦🟦🟦🟦🟦🟦🫧🫧🫧
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
+            """.trimIndent()
+
+            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            assertThat(visualize(PlayingField(setOf(carrier,battleship,destroyer,submarine,patrolBoat)))).isEqualTo(expected)
+        }
     }
 }
 
@@ -93,6 +116,10 @@ sealed class Ship(icon: String, size: Int,val at: At, val direction: Direction) 
     }
 }
 class Carrier(at: At, direction: Direction) : Ship("🛬", 5, at, direction)
+class Battleship(at: At, direction: Direction) : Ship("🛳", 4, at, direction)
+class Destroyer(at: At, direction: Direction) : Ship("⛴", 3, at, direction)
+class Submarine(at: At, direction: Direction) : Ship("🫧", 3, at, direction)
+class PatrolBoat(at: At, direction: Direction) : Ship("🚤", 2, at, direction)
 
 data class At(val x: Int, val y: Int){
     operator fun rangeTo(other: At): List<At> {
