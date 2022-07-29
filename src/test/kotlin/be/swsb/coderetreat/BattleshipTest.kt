@@ -153,6 +153,34 @@ class BattleshipTest {
         }
 
         @Test
+        fun `a playing field with a ship that was fired at twice on the same position has no extra effect`() {
+            val expected = """
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦💥🚤🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🟦🟦🟦🟦🟦🟦🟦🫧🫧🫧
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
+            """.trimIndent()
+
+            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
+            with (playingField) {
+                fire("E2")
+                fire("E2")
+            }
+            assertThat(playingField.visualize()).isEqualTo(expected)
+        }
+
+        @Test
         fun `a playing field with all ships sunk`() {
             val expected = """
                 🏊‍🟦🟦🟦🟦🟦🟦🟦🟦🟦
@@ -243,7 +271,7 @@ class PlayingField(private val ships: Set<Ship> = emptySet()) {
 }
 
 sealed class Ship(val icon: String, private val size: Int, private val at: At, private val direction: Direction) {
-    private val damages = mutableListOf<At>()
+    private val damages = mutableSetOf<At>()
 
     fun damage(at: At) {
         damages += at
