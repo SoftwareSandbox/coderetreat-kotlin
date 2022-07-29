@@ -125,18 +125,46 @@ class BattleshipTest {
         }
 
         @Test
+        fun `a playing field with a ship that was sunk`() {
+            val expected = """
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🏊‍🏊‍🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🛬🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🟦🟦🟦🟦🟦🟦🟦🫧🫧🫧
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦⛴🟦🟦
+                🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
+            """.trimIndent()
+
+            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
+            with (playingField) {
+                fire("E2")
+                fire("F2")
+            }
+            assertThat(playingField.visualize()).isEqualTo(expected)
+        }
+
+        @Test
         fun `a playing field with all ships sunk`() {
             val expected = """
-                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
-                💥🟦🟦🟦💥💥🟦🟦🟦🟦
-                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
-                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
-                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
-                🟦🟦🟦🟦🟦🟦🟦💥💥💥
-                🟦🟦💥🟦🟦🟦🟦💥🟦🟦
-                🟦🟦💥🟦🟦🟦🟦💥🟦🟦
-                🟦🟦💥🟦🟦🟦🟦💥🟦🟦
-                🟦🟦💥🟦🟦🟦🟦🟦🟦🟦
+                🏊‍🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🏊‍🟦🟦🟦🏊‍🏊‍🟦🟦🟦🟦
+                🏊‍🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🏊‍🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🏊‍🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🟦🟦🟦🟦🟦🟦🟦🏊‍🏊‍🏊‍
+                🟦🟦🏊‍🟦🟦🟦🟦🏊‍🟦🟦
+                🟦🟦🏊‍🟦🟦🟦🟦🏊‍🟦🟦
+                🟦🟦🏊‍🟦🟦🟦🟦🏊‍🟦🟦
+                🟦🟦🏊‍🟦🟦🟦🟦🟦🟦🟦
                 == YOU LOSE 😭 ==
             """.trimIndent()
 
@@ -186,11 +214,16 @@ fun PlayingField.visualize(): String {
     else visualizedPlayingField
 }
 
-fun Ship.visualize(x: Int, y: Int) = if (isDamaged(At(x, y))) Square.Damage else Square.ShipSquare(icon)
+fun Ship.visualize(x: Int, y: Int) = when {
+    isSunk() -> Square.Sunk
+    isDamaged(At(x, y)) -> Square.Damage
+    else -> Square.ShipSquare(icon)
+}
 
 sealed class Square(val icon: String) {
     object Empty : Square("🟦")
     object Damage : Square("💥")
+    object Sunk : Square("🏊‍")
     class ShipSquare(icon: String) : Square(icon)
 }
 
