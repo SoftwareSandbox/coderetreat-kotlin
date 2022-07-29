@@ -113,6 +113,54 @@ class BattleshipTest {
             playingField.fire("A3")
             assertThat(playingField.visualize()).isEqualTo(expected)
         }
+
+        @Test
+        internal fun `a playing field with all ships sunk`() {
+            val expected = """
+                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                💥🟦🟦🟦💥💥🟦🟦🟦🟦
+                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                💥🟦🟦🟦🟦🟦🟦🟦🟦🟦
+                🟦🟦🟦🟦🟦🟦🟦💥💥💥
+                🟦🟦💥🟦🟦🟦🟦💥🟦🟦
+                🟦🟦💥🟦🟦🟦🟦💥🟦🟦
+                🟦🟦💥🟦🟦🟦🟦💥🟦🟦
+                🟦🟦💥🟦🟦🟦🟦🟦🟦🟦
+            """.trimIndent()
+
+            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
+            with(playingField){
+                fire("A1")
+                fire("A2")
+                fire("A3")
+                fire("A4")
+                fire("A5")
+
+                fire("E2")
+                fire("F2")
+
+                fire("H6")
+                fire("I6")
+                fire("J6")
+
+                fire("H7")
+                fire("H8")
+                fire("H9")
+
+                fire("C7")
+                fire("C8")
+                fire("C9")
+                fire("C10")
+
+            }
+            assertThat(playingField.visualize()).isEqualTo(expected)
+        }
     }
 }
 
@@ -176,9 +224,10 @@ data class At(val x: Int, val y: Int){
     }
     companion object {
         operator fun invoke(string: String) : At {
-            val (col,row) = string.uppercase().toList()
+            val col = string.first()
+            val row = string.drop(1)
             val x = ('A'..'J').zip(0..9).toMap()[col] ?: error("Column $col out of bounds")
-            return At(x,"$row".toInt()-1)
+            return At(x, row.toInt()-1)
         }
     }
 }
