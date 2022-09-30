@@ -1,6 +1,6 @@
 # Code Retreat - Kotlin
 
-Kickstart Kotlin 1.6.20 with AssertJ and Mockito.
+Kickstart Kotlin 1.7.20 with AssertJ and Mockito.
 
 Take care to update IntelliJ's Kotlin version when prompted!
 
@@ -15,3 +15,6 @@ If you're looking for more inspiration go here [https://kata-log.rocks](https://
 
 ## Rotating Pairs Kata
 The rules to the Rotating Pairs Kata you can find in [rotatingpairs.md](rotatingpairs.md).
+
+## Battleship Kata
+The rules to the Battleship Kata you can find in [battleship.md](battleship.md).
