@@ -43,7 +43,7 @@ class BattleshipTest {
                 🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Horizontal)
+            val carrier = Carrier(At(0, 0), Dir.Horizontal)
             assertThat(PlayingField(setOf(carrier)).visualize()).isEqualTo(expected)
         }
 
@@ -62,7 +62,7 @@ class BattleshipTest {
                 🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Vertical)
+            val carrier = Carrier(At(0, 0), Dir.Vertical)
             assertThat(PlayingField(setOf(carrier)).visualize()).isEqualTo(expected)
         }
 
@@ -81,11 +81,11 @@ class BattleshipTest {
                 🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
-            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
-            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
-            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
-            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val carrier = Carrier(At(0, 0), Dir.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Dir.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Dir.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Dir.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Dir.Horizontal) //🚤
             assertThat(
                 PlayingField(
                     setOf(
@@ -114,11 +114,11 @@ class BattleshipTest {
                 🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
-            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
-            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
-            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
-            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val carrier = Carrier(At(0, 0), Dir.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Dir.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Dir.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Dir.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Dir.Horizontal) //🚤
             val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
             playingField.fire("A3")
             assertThat(playingField.visualize()).isEqualTo(expected)
@@ -139,11 +139,11 @@ class BattleshipTest {
                 🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
-            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
-            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
-            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
-            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val carrier = Carrier(At(0, 0), Dir.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Dir.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Dir.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Dir.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Dir.Horizontal) //🚤
             val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
             with (playingField) {
                 fire("E2")
@@ -167,11 +167,11 @@ class BattleshipTest {
                 🟦🟦🛳🟦🟦🟦🟦🟦🟦🟦
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
-            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
-            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
-            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
-            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val carrier = Carrier(At(0, 0), Dir.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Dir.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Dir.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Dir.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Dir.Horizontal) //🚤
             val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
             with (playingField) {
                 fire("E2")
@@ -196,11 +196,11 @@ class BattleshipTest {
                 == YOU LOSE 😭 ==
             """.trimIndent()
 
-            val carrier = Carrier(At(0, 0), Direction.Vertical) // 🛬
-            val battleship = Battleship(At(2, 6), Direction.Vertical) // 🛳
-            val destroyer = Destroyer(At(7, 6), Direction.Vertical) // ⛴
-            val submarine = Submarine(At(7, 5), Direction.Horizontal) // 🫧
-            val patrolBoat = PatrolBoat(At(4, 1), Direction.Horizontal) //🚤
+            val carrier = Carrier(At(0, 0), Dir.Vertical) // 🛬
+            val battleship = Battleship(At(2, 6), Dir.Vertical) // 🛳
+            val destroyer = Destroyer(At(7, 6), Dir.Vertical) // ⛴
+            val submarine = Submarine(At(7, 5), Dir.Horizontal) // 🫧
+            val patrolBoat = PatrolBoat(At(4, 1), Dir.Horizontal) //🚤
             val playingField = PlayingField(setOf(carrier, battleship, destroyer, submarine, patrolBoat))
             with(playingField) {
                 fire("A1")
@@ -245,7 +245,7 @@ fun PlayingField.visualize(): String {
 fun Ship.visualize(x: Int, y: Int) = when {
     isSunk() -> Square.Sunk
     isDamaged(At(x, y)) -> Square.Damage
-    else -> Square.ShipSquare(icon)
+    else -> Square.ShipSquare(i)
 }
 
 sealed class Square(val icon: String) {
