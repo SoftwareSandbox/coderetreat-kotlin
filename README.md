@@ -1,6 +1,6 @@
 # Code Retreat - Kotlin
 
-Kickstart Kotlin 1.7.20 with AssertJ and Mockito.
+Kickstart Kotlin 1.8.10 with AssertJ and Mockito (with the mockito-kotlin extensions).
 
 Take care to update IntelliJ's Kotlin version when prompted!
 
@@ -18,3 +18,6 @@ The rules to the Rotating Pairs Kata you can find in [rotatingpairs.md](rotating
 
 ## Battleship Kata
 The rules to the Battleship Kata you can find in [battleship.md](battleship.md).
+
+## MotelRoom Kata
+The rules to the MotelRoom Kata you can find in [motelroom.md](motelroom.md).

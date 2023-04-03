@@ -1,11 +1,10 @@
 package be.swsb.coderetreat
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 
 class HelloTest {
@@ -23,7 +22,7 @@ class HelloTest {
 
     @Test
     fun `sayGreeting - with mock should return a mocked greeting`() {
-        val helloMock = mock<HelloService>()
+        val helloMock : HelloService = mock()
         whenever(helloMock.sayGreeting()) doReturn("Snarf!")
         assertThat(helloMock.sayGreeting()).isEqualTo("Snarf!")
     }
