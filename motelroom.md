@@ -16,6 +16,7 @@ After a while there was a secondary countdown that added another condition: if t
 
 ## Simplified rules
 * [ ] Given 2 rooms, Room 1 and Room 2
+* [ ] When Room 1 presses the button, Room 1's timer starts.
 * [ ] When Room 2 presses button then Room 1’s timer is reset.
 * [ ] When Room 1 presses button then Room 2’s timer is reset.
 * [ ] When Room 1’s timer is up, then Room 1 wins.
