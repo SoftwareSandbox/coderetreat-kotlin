@@ -2,7 +2,10 @@ package be.swsb.coderetreat.exceptions
 
 import be.swsb.coderetreat.exceptions.TimeOutFrequency.Always
 import be.swsb.coderetreat.exceptions.TimeOutFrequency.Never
-import be.swsb.coderetreat.exceptions.domain.*
+import be.swsb.coderetreat.exceptions.db.BookDAO
+import be.swsb.coderetreat.exceptions.db.Database
+import be.swsb.coderetreat.exceptions.db.asRecord
+import be.swsb.coderetreat.exceptions.domain.ISBN
 import be.swsb.coderetreat.exceptions.rest.*
 import be.swsb.coderetreat.exceptions.service.Library
 import be.swsb.coderetreat.exceptions.service.LoanTracker
@@ -14,34 +17,34 @@ import kotlin.random.Random
 
 class EndToEndTest {
 
-    private val availableBooks: MutableList<Book> = mutableListOf()
+    private val availableBooks: MutableList<Database.BookRecord> = mutableListOf()
     private val reliableTracker: LoanTracker = LoanTrackerForTests(emptySet(), timeOutFrequency = Never)
     private val unreliableTracker: LoanTracker = LoanTrackerForTests(emptySet(), timeOutFrequency = Always)
     private val queryableErrorReporter = QueryableErrorReporter()
 
     private fun bookResource(loanTracker: LoanTracker) = BookResource(
-        library = Library(BookRepository(database = availableBooks), loanedBooksTracker = loanTracker),
+        library = Library(BookDAO(database = Database(availableBooks)), loanedBooksTracker = loanTracker),
         errorReporter = queryableErrorReporter
     )
 
     @Test
     fun `An available book can be loaned`() {
-        val expectedBook = aBook("123", "Thundercats", "Lion-O")
-        availableBooks += expectedBook
+        val expectedBook = BookTestBuilder.aBook(isbn = "123", title = "Thundercats", author = "Lion-O")
+        availableBooks += expectedBook.asRecord()
 
         val actual = bookResource(reliableTracker).loanBookByISBN("123")
-        
-        assertThat(actual).isEqualTo(ResponseEntity(expectedBook))
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(ResponseEntity(expectedBook))
         assertThat(reliableTracker.isLoaned(ISBN("123"))).isTrue
     }
 
     @Test
     fun `An evil book cannot be loaned`() {
-        val expectedBook = aBook("123", "Thundercats", "Lion-O")
-        availableBooks += expectedBook
+        val expectedBook = BookTestBuilder.aBook(isbn = "123", title = "Thundercats", author = "Lion-O")
+        availableBooks += expectedBook.asRecord()
 
         val actual = bookResource(reliableTracker).loanBookByISBN("978-0321556059")
-        
+
         assertThat(actual).isEqualTo(ResponseEntity(EvilBooksCannotBeLoaned))
         assertThat(reliableTracker.isLoaned(ISBN("123"))).isFalse
         queryableErrorReporter.assertLogsContain(EvilBooksCannotBeLoaned.message)
@@ -49,24 +52,24 @@ class EndToEndTest {
 
     @Test
     fun `An already loaned book cannot be loaned again, because we only have one copy of each book, or some other silly reason`() {
-        val expectedBook = aBook("123", "Thundercats", "Lion-O")
-        availableBooks += expectedBook
+        val expectedBook = BookTestBuilder.aBook(isbn = "123", title = "Thundercats", author = "Lion-O")
+        availableBooks += expectedBook.asRecord()
 
         val bookResource = bookResource(reliableTracker)
-        
+
         val firstLoanAttempt = bookResource.loanBookByISBN("123")
-        assertThat(firstLoanAttempt).isEqualTo(ResponseEntity(expectedBook))
+        assertThat(firstLoanAttempt).usingRecursiveComparison().isEqualTo(ResponseEntity(expectedBook))
         assertThat(reliableTracker.isLoaned(ISBN("123"))).isTrue
-        
+
         val secondAttempt = bookResource.loanBookByISBN("123")
-        assertThat(secondAttempt).isEqualTo(ResponseEntity(AlreadyLoaned("123")))
+        assertThat(secondAttempt).usingRecursiveComparison().isEqualTo(ResponseEntity(AlreadyLoaned("123")))
         assertThat(reliableTracker.isLoaned(ISBN("123"))).isTrue
         queryableErrorReporter.assertLogsContain(AlreadyLoaned("123").message)
     }
 
     @Test
     fun `We need to be able to deal with LoanTracker timeouts`() {
-        availableBooks += aBook("123", "Thundercats", "Lion-O")
+        availableBooks += BookTestBuilder.aBook(isbn = "123", title = "Thundercats", author = "Lion-O").asRecord()
 
         val actual = bookResource(unreliableTracker).loanBookByISBN("123")
         assertThat(actual).isEqualTo(ResponseEntity(TryAgain))
@@ -106,12 +109,6 @@ private sealed interface TimeOutFrequency {
         }
     }
 }
-
-private fun aBook(
-    isbn: String = "27690",
-    title: String = "Olfgar goes punch",
-    author: String = "MeeMaw",
-) = Book(ISBN(isbn), Title(title), Author(author))
 
 private class QueryableErrorReporter: ErrorReporter {
     private val log: MutableList<String> = mutableListOf()

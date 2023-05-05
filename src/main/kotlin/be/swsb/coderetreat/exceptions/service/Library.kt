@@ -1,12 +1,14 @@
 package be.swsb.coderetreat.exceptions.service
 
+import be.swsb.coderetreat.exceptions.db.BookDAO
+import be.swsb.coderetreat.exceptions.domain.Author
 import be.swsb.coderetreat.exceptions.domain.Book
-import be.swsb.coderetreat.exceptions.domain.BookRepository
 import be.swsb.coderetreat.exceptions.domain.ISBN
+import be.swsb.coderetreat.exceptions.domain.Title
 import kotlin.random.Random
 
 class Library(
-    private val bookRepository: BookRepository,
+    private val bookRepository: BookDAO,
     private val loanedBooksTracker: LoanTracker = RealLoanTracker(emptySet()),
 ) {
     @Throws(LibraryException::class)
@@ -16,6 +18,12 @@ class Library(
             ?.also { book -> loanedBooksTracker.loan(book.isbn) }
             ?: throw LibraryException("Book with $isbn isn't in our collection.")
     }
+
+    @Throws(LibraryException::class)
+    fun acquireNewBook(isbn: ISBN, title: Title, author: Author) : Book {
+        return bookRepository.save(Book.acquireNewBook(isbn, title, author))
+    }
+
     class LibraryException(message: String): RuntimeException(message)
 }
 
