@@ -1,10 +1,7 @@
 package be.swsb.coderetreat.exceptions.service
 
 import be.swsb.coderetreat.exceptions.db.BookDAO
-import be.swsb.coderetreat.exceptions.domain.Author
-import be.swsb.coderetreat.exceptions.domain.Book
-import be.swsb.coderetreat.exceptions.domain.ISBN
-import be.swsb.coderetreat.exceptions.domain.Title
+import be.swsb.coderetreat.exceptions.domain.*
 import kotlin.random.Random
 
 class Library(

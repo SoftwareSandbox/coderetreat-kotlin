@@ -9,8 +9,12 @@ class Book private constructor(
     val author: Author,
 ) {
     companion object {
-        fun acquireNewBook(isbn: ISBN, title: Title, author: Author) = Book(BookId(), isbn, title, author)
-        fun restore(id: BookId, isbn: ISBN, title: Title, author: Author) = Book(id, isbn, title, author)
+        fun acquireNewBook(isbn: ISBN, title: Title, author: Author)
+            = Book(BookId(), isbn, title, author)
+
+        context(BookRepository)
+        fun restore(id: BookId, isbn: ISBN, title: Title, author: Author)
+            = Book(id, isbn, title, author)
     }
 }
 

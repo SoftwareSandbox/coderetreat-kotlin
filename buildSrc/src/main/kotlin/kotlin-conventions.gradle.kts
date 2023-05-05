@@ -32,7 +32,7 @@ tasks.test {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         languageVersion = "1.8"
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xcontext-receivers")
         jvmTarget = "11"
     }
 }
