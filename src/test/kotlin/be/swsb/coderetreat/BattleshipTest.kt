@@ -115,4 +115,30 @@ class BattleshipTest {
 
         assertThat(actual).isEqualTo(playerField)
     }
+
+    @Test
+    fun `Firing and sinking a Carrier in the top left corner`() {
+        val playerField = """
+            🏊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🏊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🏊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🏊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🏊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+            🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+        """.trimIndent()
+        val actual = Game.startNewGame()
+            .place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically)
+            .fire(at = at(1, 1))
+            .fire(at = at(1, 2))
+            .fire(at = at(1, 3))
+            .fire(at = at(1, 4))
+            .fire(at = at(1, 5))
+            .render()
+
+        assertThat(actual).isEqualTo(playerField)
+    }
 }
