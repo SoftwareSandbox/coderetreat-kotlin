@@ -50,7 +50,7 @@ private constructor(
     private data class PlacedShip(val player: Player, val ship: Ship, val coordinates: Set<Coordinate>)
     private fun PlacedShip.wasSunk(): Boolean = gameEvents.filterIsInstance<FireWasAHit>()
         .filter { it.target == this.player }
-        .count { it.coordinate in this.coordinates } == this.ship.length
+        .map { it.coordinate }.toSet() == this.coordinates
 
     fun place(player: Player = "Player 1", ship: Ship, bowCoordinate: Coordinate, placement: Placement): Game {
         val shipCoords: Set<Coordinate> = when (placement) {
