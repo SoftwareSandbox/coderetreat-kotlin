@@ -24,7 +24,8 @@ class BattleshipTest {
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
         """.trimIndent()
 
-        val actual = render(Game.startNewGame())
+        val actual = Game.startNewGame()
+            .render()
 
         assertThat(actual).isEqualTo(playerField)
     }
@@ -43,8 +44,9 @@ class BattleshipTest {
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
         """.trimIndent()
-        val game = Game.startNewGame().place(ship = Carrier, bowCoordinate = at(1, 1), placement = Horizontally)
-        val actual = render(game)
+        val actual = Game.startNewGame()
+            .place(ship = Carrier, bowCoordinate = at(1, 1), placement = Horizontally)
+            .render()
 
         assertThat(actual).isEqualTo(playerField)
     }
@@ -63,8 +65,9 @@ class BattleshipTest {
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
         """.trimIndent()
-        val game = Game.startNewGame().place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically)
-        val actual = render(game)
+        val actual = Game.startNewGame()
+            .place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically)
+            .render()
 
         assertThat(actual).isEqualTo(playerField)
     }
@@ -83,11 +86,10 @@ class BattleshipTest {
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
         """.trimIndent()
-        val game = Game.startNewGame().place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically).fire(at = at(
-            1,
-            1
-        ))
-        val actual = render(game)
+        val actual = Game.startNewGame()
+            .place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically)
+            .fire(at = at(1, 1))
+            .render()
 
         assertThat(actual).isEqualTo(playerField)
     }
@@ -106,11 +108,10 @@ class BattleshipTest {
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
             🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
         """.trimIndent()
-        val game = Game.startNewGame().place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically).fire(at = at(
-            10,
-            1
-        ))
-        val actual = render(game)
+        val actual = Game.startNewGame()
+            .place(ship = Carrier, bowCoordinate = at(1, 1), placement = Vertically)
+            .fire(at(10, 1))
+            .render()
 
         assertThat(actual).isEqualTo(playerField)
     }

@@ -6,22 +6,35 @@ class Game
 private constructor(
     private val id: GameId,
     private val eventStream: EventStream,
-    private val player1: Player,
-    private val player2: Player,
-    private val pieces: Map<Coordinate, Piece>,
 ) {
     companion object {
-        fun startNewGame(eventStream: EventStream? = null, player1: Player? = null, player2: Player? = null): Game {
+        fun startNewGame(
+            eventStream: EventStream = EventStream(),
+            player1: Player = "Player 1",
+            player2: Player = "Player 2"
+        ): Game {
             val gameId = GameId()
-            val _eventStream = eventStream ?: EventStream()
-            val _player1 = player1 ?: "Player 1"
-            val _player2 = player2 ?: "Player 2"
-            return Game(gameId, _eventStream, _player1, _player2, emptyMap())
-                .also { it.broadcast(GameStarted(gameId, _player1, _player2)) }
+            return Game(gameId, eventStream)
+                .broadcast(GameStarted(gameId, player1, player2))
         }
     }
 
-    private fun updatePieces(pieces: Map<Coordinate, Piece>) = Game(id, eventStream, player1, player2, pieces)
+    private val player1 get() = eventStream.filter { it.gameId == id }.filterIsInstance<GameStarted>().first().player1
+
+    private val pieces: Map<Coordinate, Piece>
+        get() {
+            return eventStream.filter { it.gameId == id }
+                .flatMap { battleShipEvent ->
+                    when (battleShipEvent) {
+                        is ShipPlaced -> {
+                            battleShipEvent.shipCoordinates.map { it to battleShipEvent.ship.part }
+                        }
+                        is FireWasAHit -> listOf(battleShipEvent.coordinate to Hit)
+                        is FireWasAMiss -> emptyList()
+                        else -> emptyList()
+                    }
+                }.toMap()
+        }
 
     fun piece(at: Coordinate): Piece? = pieces[at]
 
@@ -29,16 +42,18 @@ private constructor(
         val shipCoords: Set<Coordinate> = when (placement) {
             Placement.Horizontally -> bowCoordinate.rangeRight(ship.length)
             Placement.Vertically -> bowCoordinate.rangeDown(ship.length)
-        }.also { coordinates -> broadcast(ShipPlaced(id, player, ship, coordinates)) }
-        return updatePieces(pieces + shipCoords.associateWith { ship.part })
+        }
+        return broadcast(ShipPlaced(id, player, ship, shipCoords))
     }
 
+    fun fire(at: Coordinate): Game =
+        if (piece(at) != null) broadcast(FireWasAHit(id, player1, at))
+        else broadcast(FireWasAMiss(id, player1, at))
 
-    fun fire(player: Player = "Player 1", at: Coordinate): Game =
-        if (pieces[at] != null) updatePieces(pieces + (at to Hit).also { broadcast(FireWasAHit(id, player, at)) })
-        else this.also { broadcast(FireWasAMiss(id, player, at)) }
-
-    private fun broadcast(event: BattleShipEvent) = eventStream.push(event)
+    private fun broadcast(event: BattleShipEvent): Game {
+        eventStream.push(event)
+        return this
+    }
 }
 typealias GameId = Id<Game>
 typealias Player = String

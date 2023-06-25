@@ -18,9 +18,9 @@ data class ShipPlaced(private val _gameId: GameId, val player: Player, val ship:
     BattleShipEvent(gameId = _gameId)
 data class AllShipsWerePlaced(private val _gameId: GameId, val player: Player) : BattleShipEvent(gameId = _gameId)
 
-data class FireWasAHit(private val _gameId: GameId, val player: Player, val coordinate: Coordinate) : BattleShipEvent(gameId = _gameId)
-data class FireWasAMiss(private val _gameId: GameId, val player: Player, val coordinate: Coordinate) : BattleShipEvent(gameId = _gameId)
-data class ShipWasSunk(private val _gameId: GameId, val ship: Ship, val shipCoordinates: Set<Coordinate>) :
+data class FireWasAHit(private val _gameId: GameId, val target: Player, val coordinate: Coordinate) : BattleShipEvent(gameId = _gameId)
+data class FireWasAMiss(private val _gameId: GameId, val target: Player, val coordinate: Coordinate) : BattleShipEvent(gameId = _gameId)
+data class ShipWasSunk(private val _gameId: GameId, val player: Player, val ship: Ship, val shipCoordinates: Set<Coordinate>) :
     BattleShipEvent(gameId = _gameId)
 data class AllShipsHaveSunk(private val _gameId: GameId, val player: Player) :
     BattleShipEvent(gameId = _gameId)
@@ -28,8 +28,6 @@ data class AllShipsHaveSunk(private val _gameId: GameId, val player: Player) :
 data class PlayerHasWon(private val _gameId: GameId, val player: Player) :
     BattleShipEvent(gameId = _gameId)
 
-class EventStream(private val _events: MutableList<BattleShipEvent> = mutableListOf()) {
-    val events: List<BattleShipEvent> get() = _events
+class EventStream(private val _events: MutableList<BattleShipEvent> = mutableListOf()) : List<BattleShipEvent> by _events {
     fun push(event: BattleShipEvent) = event.also { _events += event }
-    inline fun <reified T : BattleShipEvent> filterEvents() = events.filterIsInstance<T>()
 }
