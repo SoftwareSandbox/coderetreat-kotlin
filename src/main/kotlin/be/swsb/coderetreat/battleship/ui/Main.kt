@@ -1,26 +1,20 @@
 package be.swsb.coderetreat.battleship.ui
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import be.swsb.coderetreat.battleship.logic.EventStream
-import be.swsb.coderetreat.battleship.logic.Game
+import be.swsb.coderetreat.battleship.logic.*
 import be.swsb.coderetreat.battleship.logic.Piece.*
-import be.swsb.coderetreat.battleship.logic.at
 
 fun main() = application {
     Window(
@@ -36,27 +30,51 @@ fun main() = application {
 @Preview
 fun MainContent() {
     val eventStream = EventStream()
-    val game = Game.startNewGame(eventStream)
+    val initialGame = Game.startNewGame(eventStream)
     MaterialTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(1.dp)
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = CenterHorizontally,
         ) {
-            (1..10).map { y ->
-                Row(horizontalArrangement = Arrangement.spacedBy(1.dp)) {
-                    (1..10).map { x ->
-                        val displayText = when (game.piece(at(x, y))) {
-                            Hit -> """💥"""
-                            Sunk -> """🏊"""
-                            CarrierPart -> """🛳"""
-                            BattleshipPart -> """⛴️"""
-                            DestroyerPart -> """🚢"""
-                            SubmarinePart -> """🤿"""
-                            PatrolBoatPart -> """🛥"""
-                            null -> """🌊"""
-                        }
-                        Text(text = displayText)
+            var game by rememberSaveable { mutableStateOf(initialGame) }
+            var lastShipPlaced by remember { mutableStateOf("") }
+            val onClick = {
+                val ship = Carrier
+                game = game.place(ship = ship, bowCoordinate = Coordinate(1, 1), placement = Placement.Horizontally)
+                lastShipPlaced = "$ship placed!"
+            }
+            Button(
+                modifier = Modifier.padding(3.dp),
+                onClick = onClick,
+            ) { Text("Place ship") }
+            Text(lastShipPlaced)
+            Field(game)
+        }
+    }
+}
+
+@Composable
+private fun Field(game: Game) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(1.dp),
+        horizontalAlignment = CenterHorizontally,
+    ) {
+        (1..10).map { y ->
+            Row(horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+                (1..10).map { x ->
+                    val displayText = when (game.piece(at(x, y))) {
+                        Hit -> """💥"""
+                        Sunk -> """🏊"""
+                        CarrierPart -> """🛳"""
+                        BattleshipPart -> """⛴️"""
+                        DestroyerPart -> """🚢"""
+                        SubmarinePart -> """🤿"""
+                        PatrolBoatPart -> """🛥"""
+                        null -> """🌊"""
                     }
+                    Text(text = displayText)
                 }
             }
         }
