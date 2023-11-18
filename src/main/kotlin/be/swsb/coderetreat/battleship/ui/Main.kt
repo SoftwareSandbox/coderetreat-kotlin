@@ -18,11 +18,12 @@ import androidx.compose.ui.window.rememberWindowState
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Compose for Desktop",
-        state = rememberWindowState(width = 300.dp, height = 300.dp)
+        title = "Battleship",
+        state = rememberWindowState(width = 800.dp, height = 600.dp)
     ) {
         val count = remember { mutableStateOf(0) }
         MaterialTheme {
+
             Column(Modifier.fillMaxSize(), Arrangement.spacedBy(5.dp)) {
                 Button(modifier = Modifier.align(CenterHorizontally),
                     onClick = {
