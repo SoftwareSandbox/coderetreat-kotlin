@@ -29,9 +29,9 @@ private constructor(
                     when (battleShipEvent) {
                         is ShipPlaced -> battleShipEvent.shipCoordinates.map { it to battleShipEvent.ship.part }
 
-                        is FireWasAHit -> listOf(battleShipEvent.coordinate to Hit)
+                        is FireWasAHit -> listOf(battleShipEvent.coordinate to Piece.Hit)
                         is FireWasAMiss -> emptyList()
-                        is ShipWasSunk -> battleShipEvent.shipCoordinates.map { it to Sunk }
+                        is ShipWasSunk -> battleShipEvent.shipCoordinates.map { it to Piece.Sunk }
 
                         else -> emptyList()
                     }
@@ -86,14 +86,16 @@ enum class Placement {
     Vertically,
 }
 
-sealed interface Piece
-data object CarrierPart : Piece
-data object BattleshipPart : Piece
-data object DestroyerPart : Piece
-data object SubmarinePart : Piece
-data object PatrolBoatPart : Piece
-data object Hit : Piece
-data object Sunk : Piece
+enum class Piece {
+    CarrierPart,
+    BattleshipPart,
+    DestroyerPart,
+    SubmarinePart,
+    PatrolBoatPart,
+    Hit,
+    Sunk,
+}
+
 
 
 sealed interface Ship {
@@ -103,25 +105,25 @@ sealed interface Ship {
 
 data object Carrier : Ship {
     override val length = 5
-    override val part: Piece = CarrierPart
+    override val part: Piece = Piece.CarrierPart
 }
 
 data object Battleship : Ship {
     override val length = 4
-    override val part: Piece = BattleshipPart
+    override val part: Piece = Piece.BattleshipPart
 }
 
 data object Destroyer : Ship {
     override val length = 3
-    override val part: Piece = DestroyerPart
+    override val part: Piece = Piece.DestroyerPart
 }
 
 data object Submarine : Ship {
     override val length = 3
-    override val part: Piece = SubmarinePart
+    override val part: Piece = Piece.SubmarinePart
 }
 
 data object PatrolBoat : Ship {
     override val length = 2
-    override val part: Piece = PatrolBoatPart
+    override val part: Piece = Piece.PatrolBoatPart
 }
