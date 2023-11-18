@@ -1,6 +1,7 @@
 package be.swsb.coderetreat.battleship.logic
 
 import be.swsb.coderetreat.battleship.common.Id
+import be.swsb.coderetreat.battleship.logic.Piece.*
 
 class Game
 private constructor(
@@ -29,9 +30,9 @@ private constructor(
                     when (battleShipEvent) {
                         is ShipPlaced -> battleShipEvent.shipCoordinates.map { it to battleShipEvent.ship.part }
 
-                        is FireWasAHit -> listOf(battleShipEvent.coordinate to Piece.Hit)
+                        is FireWasAHit -> listOf(battleShipEvent.coordinate to Hit)
                         is FireWasAMiss -> emptyList()
-                        is ShipWasSunk -> battleShipEvent.shipCoordinates.map { it to Piece.Sunk }
+                        is ShipWasSunk -> battleShipEvent.shipCoordinates.map { it to Sunk }
 
                         else -> emptyList()
                     }
@@ -78,6 +79,7 @@ private constructor(
         return this
     }
 }
+
 typealias GameId = Id<Game>
 typealias Player = String
 
@@ -98,32 +100,13 @@ enum class Piece {
 
 
 
-sealed interface Ship {
-    val length: Int
-    val part: Piece
-}
+sealed class Ship (
+    val length: Int,
+    val part: Piece,
+)
 
-data object Carrier : Ship {
-    override val length = 5
-    override val part: Piece = Piece.CarrierPart
-}
-
-data object Battleship : Ship {
-    override val length = 4
-    override val part: Piece = Piece.BattleshipPart
-}
-
-data object Destroyer : Ship {
-    override val length = 3
-    override val part: Piece = Piece.DestroyerPart
-}
-
-data object Submarine : Ship {
-    override val length = 3
-    override val part: Piece = Piece.SubmarinePart
-}
-
-data object PatrolBoat : Ship {
-    override val length = 2
-    override val part: Piece = Piece.PatrolBoatPart
-}
+data object Carrier : Ship (length = 5, part = CarrierPart)
+data object Battleship : Ship (length = 4, part = BattleshipPart)
+data object Destroyer : Ship (length = 3, part = DestroyerPart)
+data object Submarine : Ship (length = 3, part = SubmarinePart)
+data object PatrolBoat : Ship (length = 2, part = PatrolBoatPart)
