@@ -22,6 +22,7 @@ private constructor(
 
     private val gameEvents get() = eventStream.filter { it.gameId == id }
     private val player1 get() = gameEvents.filterIsInstance<GameStarted>().first().player1
+    val shipsPlaced get() = gameEvents.filterIsInstance<ShipPlaced>()
 
     private val pieces: Map<Coordinate, Piece>
         get() {
