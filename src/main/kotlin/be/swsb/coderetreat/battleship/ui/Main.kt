@@ -67,7 +67,7 @@ fun MainContent(game: Game) {
                     horizontalArrangement = Arrangement.spacedBy(3.dp),
                     verticalAlignment = CenterVertically
                 ) {
-                    Text("Place your $ship now.")
+                    Text("Place your ${ship.part.renderAsEmoticon()} ($ship) now.")
                     Button(
                         modifier = Modifier.padding(3.dp),
                         onClick = { placement = placement.toggle() },
