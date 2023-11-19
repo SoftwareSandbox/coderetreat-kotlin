@@ -2,12 +2,14 @@ package be.swsb.coderetreat.battleship.ui
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -28,14 +30,17 @@ fun main() = application {
     }
 }
 
-enum class GameState {
-    PlacingShips,
-    Firing,
-    GameOver,
-}
-
 @Composable
 @Preview
+private fun preview() {
+    val events = mutableStateListOf<BattleShipEvent>()
+    val game = Game.startNewGame(EventStream(events))
+    MainContent(game)
+}
+
+val allShips = listOf(Carrier, Battleship, Destroyer, Submarine, PatrolBoat)
+
+@Composable
 fun MainContent(game: Game) {
     MaterialTheme {
         Column(
@@ -45,17 +50,16 @@ fun MainContent(game: Game) {
         ) {
             var placement by remember { mutableStateOf(Placement.Horizontally) }
             var ship: Ship by remember { mutableStateOf(Carrier) }
-            val allShips = listOf(Carrier, Battleship, Destroyer, Submarine, PatrolBoat)
-            val shipsToPlace = (allShips - game.shipsPlaced.map { it.ship }.toSet()).toMutableStateList()
+            val shipsToPlace = game.remainingShipsToPlace.toMutableStateList()
             var state by remember { mutableStateOf(PlacingShips) }
             val shipPlacement = { x: Int, y: Int ->
                 {
                     game.place(ship = ship, bowCoordinate = Coordinate(x, y), placement = placement)
                     shipsToPlace.remove(ship)
+                    shipsToPlace.firstOrNull()?.let { ship = it }
                     if (shipsToPlace.isEmpty()) {
                         state = Firing
                     }
-                    Unit
                 }
             }
             if (state == PlacingShips) {
@@ -63,21 +67,7 @@ fun MainContent(game: Game) {
                     horizontalArrangement = Arrangement.spacedBy(3.dp),
                     verticalAlignment = CenterVertically
                 ) {
-                    Text("Place ship")
-                    var expanded: DropdownMenuState.Status by remember { mutableStateOf(DropdownMenuState.Status.Closed) }
-                    Button(onClick = {
-                        expanded = DropdownMenuState.Status.Open(Offset.Zero)
-                    }) { Text(ship.toString()) }
-                    DropdownMenu(
-                        state = DropdownMenuState(expanded),
-                        onDismissRequest = { expanded = DropdownMenuState.Status.Closed }) {
-                        shipsToPlace.map { selectedShip ->
-                            DropdownMenuItem(onClick = {
-                                ship = selectedShip
-                                expanded = DropdownMenuState.Status.Closed
-                            }) { Text(selectedShip.toString()) }
-                        }
-                    }
+                    Text("Place your $ship now.")
                     Button(
                         modifier = Modifier.padding(3.dp),
                         onClick = { placement = placement.toggle() },
@@ -91,16 +81,19 @@ fun MainContent(game: Game) {
     }
 }
 
+private val Game.remainingShipsToPlace get() = (allShips - shipsPlaced.map { it.ship }.toSet())
+
 private fun Placement.toggle() = if (this == Placement.Horizontally) Placement.Vertically else Placement.Horizontally
 
 @Composable
 private fun Field(game: Game, state: GameState, shipPlacement: (x: Int, y: Int) -> () -> Unit) {
     fun coordinateHandler(state: GameState, game: Game, x: Int, y: Int): () -> Unit {
-        return when(state) {
-            PlacingShips -> shipPlacement(x,y)
+        return when (state) {
+            PlacingShips -> shipPlacement(x, y)
             Firing -> {
                 { game.fire(at(x, y)) }
             }
+
             GameOver -> {
                 { }
             }
@@ -135,4 +128,10 @@ private fun Piece?.renderAsEmoticon() = when (this) {
     SubmarinePart -> """🤿"""
     PatrolBoatPart -> """🛥"""
     null -> """🌊"""
+}
+
+enum class GameState {
+    PlacingShips,
+    Firing,
+    GameOver,
 }
