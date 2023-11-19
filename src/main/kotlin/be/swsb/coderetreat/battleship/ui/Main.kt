@@ -58,27 +58,33 @@ fun MainContent(game: Game) {
                     Unit
                 }
             }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(3.dp),
-                verticalAlignment = CenterVertically
-            ) {
-                Text("Place ship")
-                var expanded: DropdownMenuState.Status by remember { mutableStateOf(DropdownMenuState.Status.Closed) }
-                Button(onClick = { expanded = DropdownMenuState.Status.Open(Offset.Zero) }) { Text(ship.toString()) }
-                DropdownMenu(
-                    state = DropdownMenuState(expanded),
-                    onDismissRequest = { expanded = DropdownMenuState.Status.Closed }) {
-                    shipsToPlace.map { selectedShip ->
-                        DropdownMenuItem(onClick = {
-                            ship = selectedShip
-                            expanded = DropdownMenuState.Status.Closed
-                        }) { Text(selectedShip.toString()) }
+            if (state == PlacingShips) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(3.dp),
+                    verticalAlignment = CenterVertically
+                ) {
+                    Text("Place ship")
+                    var expanded: DropdownMenuState.Status by remember { mutableStateOf(DropdownMenuState.Status.Closed) }
+                    Button(onClick = {
+                        expanded = DropdownMenuState.Status.Open(Offset.Zero)
+                    }) { Text(ship.toString()) }
+                    DropdownMenu(
+                        state = DropdownMenuState(expanded),
+                        onDismissRequest = { expanded = DropdownMenuState.Status.Closed }) {
+                        shipsToPlace.map { selectedShip ->
+                            DropdownMenuItem(onClick = {
+                                ship = selectedShip
+                                expanded = DropdownMenuState.Status.Closed
+                            }) { Text(selectedShip.toString()) }
+                        }
                     }
+                    Button(
+                        modifier = Modifier.padding(3.dp),
+                        onClick = { placement = placement.toggle() },
+                    ) { Text("$placement") }
                 }
-                Button(
-                    modifier = Modifier.padding(3.dp),
-                    onClick = { placement = placement.toggle() },
-                ) { Text("$placement") }
+            } else {
+                Text("Fire away!")
             }
             Field(game, state, shipPlacement)
         }
