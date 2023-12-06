@@ -62,19 +62,25 @@ fun MainContent(game: Game) {
                     }
                 }
             }
-            if (state == PlacingShips) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(3.dp),
-                    verticalAlignment = CenterVertically
-                ) {
-                    Text("Place your ${ship.part.renderAsEmoticon()} ($ship) now.")
-                    Button(
-                        modifier = Modifier.padding(3.dp),
-                        onClick = { placement = placement.toggle() },
-                    ) { Text("$placement") }
+            when (state) {
+                PlacingShips -> {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(3.dp),
+                        verticalAlignment = CenterVertically
+                    ) {
+                        Text("Place your ${ship.part.renderAsEmoticon()} ($ship) now.")
+                        Button(
+                            modifier = Modifier.padding(3.dp),
+                            onClick = { placement = placement.toggle() },
+                        ) { Text("$placement") }
+                    }
                 }
-            } else {
-                Text("Fire away!")
+                Firing -> {
+                    Text("Fire away!")
+                }
+                else -> {
+                    Text("Victory!")
+                }
             }
             Field(game, state, shipPlacement)
         }
