@@ -22,9 +22,17 @@ data class Complex(val real: Float, val imaginary: Float) {
     operator fun times(other: Complex) =
         Complex(real * other.real - imaginary * other.imaginary, real * other.imaginary + imaginary * other.real)
 
-    fun isInMandelbrotSet(iterations: Int = 100) = generateMandelbrotSequence()
+    fun isInMandelbrotSet(iterations: Int = 100) = isInMandelbrotSetGen(iterations) != null
+
+    fun isInMandelbrotSetGen(iterations: Int = 100): Int? = generateMandelbrotSequence()
         .take(iterations)
-        .none { it.absoluteValue > 2 }
+        .indexOfLast { it.absoluteValue >= 2 }
+        .let { index ->
+            if (index >= 0)
+                return index
+            else
+                return null
+        }
 
     fun nextMandelbrot(start: Complex) = this * this + start
 
@@ -99,15 +107,13 @@ class MandelbrotTest {
         }
     }
 
-
-
     @Test
     fun generateBmp() {
         val size = Dimension(1000, 1000)
         val img = BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB)
         (0 until size.width).forEach { x ->
             (0 until size.height).forEach { y ->
-                val color = if(Point(x,y).toComplexNumber().isInMandelbrotSet(1)) Color.BLACK else Color.WHITE
+                val color = if(Point(x,y).toComplexNumber().isInMandelbrotSet(25)) Color.BLACK else Color.WHITE
                 img.setRGB(x, y, color.rgb)
             }
         }
