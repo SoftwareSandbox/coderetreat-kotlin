@@ -1,17 +1,17 @@
 # Dittle
 
 Dittle is a dice game where 2 players try to reach their opponents back rank with all their dice on a 7x7 grid.
-To move a die, it can be rolled orthogonally 1 step, jump over another die, or perform a combination of the former (roll then jump then jump again).
+To move a die, it can be tilted orthogonally 1 step, jump over another die, or perform a combination of the former (tilt then jump then jump again).
 
 ## Rules
 
-One can roll or jump in any orthogonal direction.  
-One can never roll or jump diagonally.  
-One can combine a jump after a roll, but not a roll after a jump.  
-One may choose to not jump in a combination with a roll.  
-The way the dice roll is deterministic.  
+One can tilt or jump in any orthogonal direction.  
+One can never tilt or jump diagonally.  
+One can combine a jump after a tilt, but not a tilt after a jump.  
+One may choose to not jump in a combination with a tilt.  
+The way the dice tilt is deterministic.  
 When a die jumps, the face remains the same, and it moves 2 spaces.  
-When a die rolls, its face changes based on deterministic rules, and it moves 1 space.
+When a die tilts, its face changes based on deterministic rules, and it moves 1 space.
 A die can only jump in a direction when there is any other die in that direction and there is an empty space next to it.
 
 ## Deterministic Dice Definition (DDD)
@@ -21,16 +21,16 @@ Here's a flattened, visual representation of a real die:
  ⚁ ⚅ ⚄ ⚀
    ⚃
 ```
-Starting dice are always a `⚅` oriented the same way (rolling right would land them on a `⚁`).  
-Given the above, flattened representation, these are examples of correct, deterministic rolls.
+Starting dice are always a `⚅` oriented the same way (tilting right would land them on a `⚁`).  
+Given the above, flattened representation, these are examples of correct, deterministic tilts.
 
-Rolling right:  
+Tilting right:  
 `⚅ -> ⚁`, `⚁ -> ⚀`, `⚀ -> ⚄`, `⚄ -> ⚅`
 
-Rolling down:  
+Tilting down:  
 `⚅ -> ⚂`, `⚂ -> ⚀`, `⚀ -> ⚃`, `⚃ -> ⚅`
 
-Rolling up, after having rolled left twice:  
+Tilting up, after having tilted left twice:  
 `⚅ -> ⚄`, `⚄ -> ⚀`, `⚀ -> ⚃`, `⚃ -> ⚅`, `⚅ -> ⚂`, `⚂ -> ⚀`
 
 ## Representation
@@ -45,7 +45,7 @@ Here's how the game starts:
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Right always starts, here they rolled the 2nd die to the left, revealing a new side: ⚄
+Right always starts, here they tilted the 2nd die to the left, revealing a new side: ⚄
 ```
 ⚅ . . . . . ⚅
 ⚅ . . . . ⚄ .
@@ -55,7 +55,7 @@ Right always starts, here they rolled the 2nd die to the left, revealing a new s
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Left's turn, they also rolled the 2nd die but to the right, revealing a new side: ⚁
+Left's turn, they also tilted the 2nd die but to the right, revealing a new side: ⚁
 ```
 ⚅ . . . . . ⚅
 . ⚁ . . . ⚄ .
@@ -65,7 +65,7 @@ Left's turn, they also rolled the 2nd die but to the right, revealing a new side
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Right continues rolling
+Right continues tilting
 ```
 ⚅ . . . . . ⚅
 . ⚁ . . ⚀ . .
@@ -75,7 +75,7 @@ Right continues rolling
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Left continues rolling
+Left continues tilting
 ```
 ⚅ . . . . . ⚅
 . . ⚀ . ⚀ . .
@@ -85,7 +85,7 @@ Left continues rolling
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Right rolls, then jumps (when jumping, the die does not roll)
+Right tilts, then jumps (when jumping, the die does not tilt)
 ```
 ⚅ . . . . . ⚅
 . ⚁ ⚀ . . . .
@@ -95,7 +95,7 @@ Right rolls, then jumps (when jumping, the die does not roll)
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Left continues rolling
+Left continues tilting
 ```
 ⚅ . . . . . ⚅
 . ⚁ . ⚄ . . .
@@ -105,7 +105,7 @@ Left continues rolling
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
-Right continues rolling and has reached one of their dice to the opposition's back rank, scoring 6.
+Right continues tilting and has reached one of their dice to the opposition's back rank, scoring 6.
 ```
 ⚅ . . . . . ⚅
 ⚅ . . ⚄ . . .
@@ -115,3 +115,8 @@ Right continues rolling and has reached one of their dice to the opposition's ba
 ⚅ . . . . . ⚅
 ⚅ . . . . . ⚅
 ```
+
+## Alternative playstyles
+* What if the dice weren't D6's, but D8's, D10's, D12's or D20's?
+* What if the grid wasn't 7x7, but 10x10?
+* What if the grid wasn't a square?
